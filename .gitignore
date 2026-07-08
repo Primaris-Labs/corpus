@@ -1,0 +1,12 @@
+.env
+data/raw/
+data/processed/
+data/interim/
+*.pt
+*.pth
+*.egg-info/
+__pycache__/
+.DS_Store
+.ipynb_checkpoints/
+dist/
+build/
