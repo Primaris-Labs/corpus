@@ -13,13 +13,16 @@ API_URL = "http://localhost:8000/identify"
 
 
 def predict(image: Image.Image):
+    if image is None:
+        return "No image provided.", "", ""
+    
     buffer = io.BytesIO()
     image.save(buffer, format="JPEG")
     encoded = base64.b64encode(buffer.getvalue()).decode("utf-8")
 
     response = requests.post(API_URL, json={"image": encoded})
     if response.status_code != 200:
-        return "Error contacting API.", "", ""
+        return f"Error: {response.status_code}", "", ""
 
     data = response.json()
     return data["part"], f"{data['confidence']*100:.1f}%", data["description"]
@@ -34,7 +37,7 @@ demo = gr.Interface(
         gr.Text(label="Description"),
     ],
     title="Corpus",
-    description="Upload an image of a human body part or bone to identify it.",
+    description="Upload an image of a human body part to identify it.",
 )
 
 if __name__ == "__main__":
