@@ -4,12 +4,13 @@ Upload an image and get the predicted body part with confidence.
 """
 import base64
 import io
+import os
 import requests
 import gradio as gr
 from PIL import Image
 
 
-API_URL = "http://localhost:8000/identify"
+API_URL = os.getenv("API_URL", "http://localhost:8000/identify")
 
 
 def predict(image: Image.Image):

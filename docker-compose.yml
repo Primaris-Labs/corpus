@@ -16,6 +16,8 @@ services:
       - "7860:7860"
     env_file:
       - .env
+    environment:
+      - API_URL=http://api:8000/identify
     command: python src/ui/app.py
     volumes:
       - ./src:/app/src
