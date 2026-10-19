@@ -4,7 +4,6 @@ Identifies the body part shown in a photo: show your hand to the camera or uploa
 
 Built by [Primaris Labs](https://github.com/Primaris-Labs) as a first open-source machine learning project.
 
-<!-- DEMO: replace with your recording (see "Media to add" below) -->
 ![Corpus demo](docs/demo.gif)
 
 ## Contents
@@ -19,6 +18,8 @@ Built by [Primaris Labs](https://github.com/Primaris-Labs) as a first open-sourc
 ## Overview
 
 Corpus classifies photos of human body parts into **10 classes** (hand, knee, shoulders, neck and more). It fine-tunes a **MobileNetV2** network pre-trained on ImageNet (**transfer learning**) on the **[Body Parts Dataset](https://www.kaggle.com/datasets/linkanjarad/body-parts-dataset)** (2,092 images), trained on a GPU in **Google Colab**.
+
+![Corpus demo](docs/demo-hand.png)
 
 The trained model is served by a **FastAPI** REST API and a **Gradio** web interface, both packaged with **Docker**. Tests run with **pytest** on every push through **GitHub Actions**.
 
