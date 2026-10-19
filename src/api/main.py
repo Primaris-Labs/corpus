@@ -1,5 +1,5 @@
 """
-FastAPI application — POST /identify endpoint.
+FastAPI application - POST /identify endpoint.
 Accepts a base64-encoded image and returns the predicted body part.
 """
 import base64

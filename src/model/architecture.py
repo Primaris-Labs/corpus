@@ -1,5 +1,5 @@
 """
-Model architecture — MobileNetV2 with a custom classification head.
+Model architecture - MobileNetV2 with a custom classification head.
 Swap to resnet50 by changing the base model.
 """
 import torch.nn as nn
