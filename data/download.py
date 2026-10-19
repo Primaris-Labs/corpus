@@ -1,6 +1,6 @@
 """
 Download the Corpus dataset from Kaggle.
-Requires KAGGLE_USERNAME and KAGGLE_KEY in your .env file.
+Requires KAGGLE_API_TOKEN in your .env file.
 """
 import os
 from dotenv import load_dotenv
@@ -8,8 +8,7 @@ from dotenv import load_dotenv
 load_dotenv()
 
 def download():
-    os.environ["KAGGLE_USERNAME"] = os.getenv("KAGGLE_USERNAME", "")
-    os.environ["KAGGLE_KEY"] = os.getenv("KAGGLE_KEY", "")
+    os.environ["KAGGLE_API_TOKEN"] = os.getenv("KAGGLE_API_TOKEN", "")
 
     import kaggle
 
