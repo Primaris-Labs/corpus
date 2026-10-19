@@ -1,108 +1,88 @@
 # Corpus
 
-A computer vision model that identifies human body parts from images.
+Identifies the body part shown in a photo: show your hand to the camera or upload an image, and get the predicted body part, a confidence score, and a short anatomical description.
 
-Built by [Primaris Labs](https://github.com/Primaris-Labs) as a first open-source ML project.
+Built by [Primaris Labs](https://github.com/Primaris-Labs) as a first open-source machine learning project.
 
----
+<!-- DEMO: replace with your recording (see "Media to add" below) -->
+![Corpus demo](docs/demo.gif)
 
-## What it does
+## Contents
 
-Send an image of a human body part or bone. Corpus returns:
-- The name of the part
-- A confidence score
-- A short anatomical description
+- [Overview](#overview)
+- [Results](#results)
+- [Tech Stack](#tech-stack)
+- [API](#api)
+- [Run Locally](#run-locally)
+- [Next Steps](#next-steps)
 
----
+## Overview
 
-## Stack
+Corpus classifies photos of human body parts into **10 classes** (hand, knee, shoulders, neck and more). It fine-tunes a **MobileNetV2** network pre-trained on ImageNet (**transfer learning**) on the **[Body Parts Dataset](https://www.kaggle.com/datasets/linkanjarad/body-parts-dataset)** (2,092 images), trained on a GPU in **Google Colab**.
 
-- PyTorch + torchvision — model training and inference
-- MobileNetV2 — pre-trained backbone (transfer learning)
-- FastAPI — REST API
-- Gradio — browser interface
-- pytest + GitHub Actions — tests and CI/CD
+The trained model is served by a **FastAPI** REST API and a **Gradio** web interface, both packaged with **Docker**. Tests run with **pytest** on every push through **GitHub Actions**.
 
----
+## Results
 
-## Getting started
+| Metric | Value |
+|---|---|
+| Validation accuracy | **76.59 %** |
+| Classes | 10 |
+| Images | 2,092 |
+| Data split | 70 % train / 15 % validation / 15 % test |
 
-### 1. Clone the repo
+**Known limitations.** The model still produces a notable number of false positives: it sometimes predicts a body part with high confidence when the image shows another one. Part of the cause is the dataset itself, which mixes regular photos with X-rays, anatomical drawings and watermarked images, and some photos don't cleanly isolate their label (for example, an "eye" photo that also shows the nose). This inconsistent labeling sometimes skews the reported accuracy. The per-prediction confidence score should therefore not be read as a measure of correctness yet. Reducing these errors is the current focus (see [Next Steps](#next-steps)).
 
-```bash
-git clone https://github.com/Primaris-Labs/corpus.git
-cd corpus
-```
+## Tech Stack
 
-### 2. Open in VS Code Dev Container
-
-Install the [Dev Containers](https://marketplace.visualstudio.com/items?itemName=ms-vscode-remote.remote-containers) extension, then:
-
-```
-Ctrl+Shift+P > Dev Containers: Reopen in Container
-```
-
-Dependencies install automatically.
-
-### 3. Set up environment
-
-```bash
-cp .env.example .env
-# Fill in your Kaggle credentials
-```
-
-### 4. Download the dataset
-
-```bash
-python data/download.py
-```
-
-### 5. Train the model
-
-```bash
-python src/model/train.py
-```
-
-Or open `notebooks/explore.ipynb` on Google Colab for GPU training.
-
-### 6. Run the API and UI
-
-```bash
-docker-compose up
-```
-
-- API: http://localhost:8000
-- UI: http://localhost:7860
-
----
+| Layer | Technology |
+|---|---|
+| **Model** | PyTorch, torchvision, MobileNetV2 (transfer learning) |
+| **Training** | Google Colab (GPU), Jupyter |
+| **API** | FastAPI |
+| **Interface** | Gradio |
+| **Infrastructure** | Docker, Docker Compose, Dev Containers |
+| **Testing & CI** | pytest, GitHub Actions |
 
 ## API
 
-### POST /identify
+`POST /identify` takes a base64-encoded image and returns the most likely body part.
 
-**Request**
 ```json
-{ "image": "base64_encoded_image_string" }
-```
+// Request
+{ "image": "<base64-encoded image>" }
 
-**Response**
-```json
+// Response
 {
-  "part": "Femur",
-  "confidence": 0.94,
-  "description": "Longest bone in the human body, located in the thigh."
+  "part": "Hand",
+  "confidence": 0.87,
+  "description": "The distal part of the upper limb, containing the carpals, metacarpals, and phalanges."
 }
 ```
 
----
+`confidence` is the model's softmax probability for the predicted class, not an accuracy measure.
 
-## Running tests
+## Run Locally
+
+Requirements: Docker and a Kaggle account (to download the dataset).
 
 ```bash
-pytest tests/ -v
+git clone https://github.com/Primaris-Labs/corpus.git && cd corpus
+cp .env.example .env            # add your Kaggle credentials
+python data/download.py         # download the dataset
+python src/model/train.py       # or train on GPU with notebooks/explore.ipynb in Colab
+docker-compose up               # API on :8000, interface on :7860
 ```
 
----
+Run the tests with `pytest tests/ -v`.
+
+## Next Steps
+
+- [ ] Report accuracy on the held-out **test set**, plus per-class results and a confusion matrix
+- [ ] Clean the dataset: remove X-rays, drawings and watermarked images that do not match real photos
+- [ ] Reduce false positives: data augmentation, class balancing, and an "uncertain" answer below a confidence threshold
+- [ ] Compare MobileNetV2 with a larger backbone such as ResNet-50
+- [ ] Host a public demo
 
 ## License
 
