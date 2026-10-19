@@ -34,7 +34,7 @@ demo = gr.Interface(
     inputs=gr.Image(type="pil", label="Upload an image"),
     outputs=[
         gr.Text(label="Body Part"),
-        gr.Text(label="Confidence"),
+        gr.Text(label="Confidence", info="Model's probability for this specific prediction, not overall accuracy."),
         gr.Text(label="Description"),
     ],
     title="Corpus",
