@@ -13,13 +13,13 @@ def download():
 
     import kaggle
 
-    print("Downloading UNIFESP X-Ray Body Part dataset...")
+    print("Downloading Body Parts dataset...")
     kaggle.api.dataset_download_files(
-        "felipekitamura/unifesp-x-ray-body-part-classifier",
-        path="data/raw/unifesp",
+        "linkanjarad/body-parts-dataset",
+        path="data/raw/body-parts",
         unzip=True,
     )
-    print("Done. Images saved to data/raw/unifesp/")
+    print("Done. Images saved to data/raw/body-parts/")
 
 if __name__ == "__main__":
     download()

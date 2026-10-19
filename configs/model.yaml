@@ -1,6 +1,6 @@
 model:
   name: mobilenet_v2          # or resnet50
-  num_classes: 22             # update once dataset classes are confirmed
+  num_classes: 10            # update once dataset classes are confirmed
   pretrained: true
 
 training:
